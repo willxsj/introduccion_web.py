@@ -15,12 +15,12 @@ class Index:
         return render.index() 
     
     def POST(self):
-        try:
-                print("Recibiendo datos del formulario")
-                formulario = web.input()
-                print(formulario)
+        
+            print("Recibiendo datos del formulario")
+            formulario = web.input()
+            print(formulario)
 
-       
+            try:       
                 numero1 = float(formulario.numero1)
                 numero2 = float(formulario.numero2)
                 operacion = formulario.operacion
@@ -32,19 +32,20 @@ class Index:
                 elif operacion == "multiplicar":
                     resultado = numero1 * numero2
                 elif operacion == "dividir":
-                    resultado = numero1 / numero2
+                    if numero1 == 0 or numero2 == 0:
+                        resultado = "Error: No se pede dividir entre 0 "
+                    else:
+                        resultado = numero1 / numero2
                 else:
                     resultado = "no valido"
 
-
-        except Exception as e:
-            print(f"Error 001:  {e.arg[0]}")
-            print("Error al dividir") 
-            
-
-
-        print(f"Resultado: {resultado}")
-        return render.index(resultado)
+            except ValueError:
+                resultado = "Error: Todos los campos tienen valor numerico"
+            except Exception as e:
+                resultado = f"Error 001:  {e.arg[0]}"
+                
+            print(f"Resultado: {resultado}")
+            return render.index(resultado)
 
 if __name__ == "__main__":
     app.run()
